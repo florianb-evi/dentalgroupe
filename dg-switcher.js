@@ -74,6 +74,16 @@
         return '<path class="p" style="--dx:' + DIR[i][0] + ';--dy:' + DIR[i][1] + '" d="' + d + '" fill="' + (on ? 'url(#' + k + i + ')' : 'rgba(255,255,255,.12)') + '"/>';
       }).join('') + '</svg>';
   }
+  var WORD = '<path fill-rule="evenodd" d="M116.68.43h19.16c12.65,0,21.15,7.07,21.15,17.94s-8.5,17.94-21.15,17.94h-19.16V.43ZM124.77,7.12v22.44h10.63c8.57,0,13.24-4.18,13.24-11.18s-4.67-11.25-13.24-11.25h-10.63Z"/><path d="M171.21.43h32.23v6.69h-24.21v7.87h17.25v6.34h-17.25v8.22h24.21v6.76h-32.23V.43Z"/><path d="M217.55.43h8.19l23.2,25.09V.43h7.98v35.89h-8.36l-23-24.95v24.95h-8.01V.43Z"/><path d="M269.81.43h35.19v6.76h-13.87v29.13h-7.98V7.19h-13.34V.43Z"/><path d="M308.83,36.31L326.36.43h7.11l17.52,35.89h-8.71l-12.37-26.44-12.58,26.44h-8.5Z"/><path d="M362.66.43h7.94v29.13h20.45v6.76h-28.4V.43Z"/><path d="M136.1,65.37h10.64v6.12c-3.03,1.54-6.53,2.31-10.39,2.31-8.81,0-14.07-4.57-14.07-12.23s5.82-12.37,14.14-12.37c4.79,0,8.29,1.04,12.09,3.59l.78.53,3.29-4.67-.78-.55c-4.27-3.03-9.28-4.5-15.31-4.5-11.69,0-20.18,7.56-20.18,17.98,0,11.05,7.68,17.910,20.04,17.910,6.080,0,11.11-1.45,15.84-4.55l.43-.28v-14.67h-16.53v5.39Z"/><path fill-rule="evenodd" d="M203.63,54.83c0-7.04-5.55-11.24-14.85-11.24h-17.57v35.89h6.11v-12.9h10.69l10.32,12.9h7.88l-11.29-13.79c5.7-1.52,8.71-5.27,8.71-10.86ZM197.52,54.83c0,4.14-2.98,6.16-9.11,6.16h-11.1v-11.73h11.1c6.13,0,9.11,1.82,9.11,5.57Z"/><path fill-rule="evenodd" d="M237.23,43.6c-12.06,0-20.48,7.59-20.48,18.45s8.42,18.37,20.48,18.37,20.48-7.56,20.48-18.37-8.42-18.45-20.48-18.45ZM251.61,62.05c0,7.56-5.78,12.63-14.38,12.63s-14.38-5.08-14.38-12.63,5.91-12.7,14.38-12.7,14.38,5.22,14.38,12.7Z"/><path d="M298.57,64.83c0,6.63-3.54,9.71-11.13,9.71s-11.27-3.09-11.27-9.71v-21.24h-6.17v21.53c0,9.9,6.19,15.36,17.44,15.36s17.37-5.45,17.37-15.36v-21.53h-6.24v21.24Z"/><path fill-rule="evenodd" d="M333.05,43.6h-17.43v35.89h6.11v-12.16h11.32c9.53,0,14.77-4.23,14.77-11.9s-5.25-11.83-14.77-11.83ZM341.64,55.42c0,4.13-3.04,6.23-9.03,6.23h-10.87v-12.39h10.87c6.08,0,9.03,2.01,9.03,6.16Z"/><polygon points="391.67 49.27 391.67 43.6 362.05 43.6 362.05 79.48 391.67 79.48 391.67 73.82 368.16 73.82 368.16 64.01 385.55 64.01 385.55 58.34 368.16 58.34 368.16 49.27 391.67 49.27"/>';
+  function LOGO(cls) {
+    var k = 'dgl' + (++uid) + '_';
+    var defs = GR.map(function (c, i) {
+      return '<linearGradient id="' + k + i + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + c[0] + '"/><stop offset=".5" stop-color="' + c[1] + '"/><stop offset="1" stop-color="' + c[2] + '"/></linearGradient>';
+    }).join('');
+    return '<svg class="' + (cls || '') + '" viewBox="0 0 391.67 80.49" role="img" aria-label="DENTAL GROUPE"><defs>' + defs + '</defs>' +
+      Q.map(function (d, i) { return '<path class="p" style="--dx:' + DIR[i][0] + ';--dy:' + DIR[i][1] + '" d="' + d + '" fill="url(#' + k + i + ')"/>'; }).join('') +
+      '<g fill="#fff">' + WORD + '</g></svg>';
+  }
   var CHEV = '<svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 10l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var ARROW = '<svg class="arr" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var CLOSE = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
@@ -92,7 +102,7 @@
   }
   var selHtml =
     '<div class="sel" role="dialog" aria-modal="true" aria-label="Les entités DENTAL GROUPE" hidden>' +
-      '<div class="sel-top"><span class="brand">' + SYMBOL('bs') + '<b>DENTAL GROUPE</b></span>' +
+      '<div class="sel-top"><span class="brand">' + LOGO('bl-logo') + '</span>' +
       '<button class="x" type="button" aria-label="Fermer">' + CLOSE + '</button></div>' +
       '<p class="sel-t">Où voulez-vous aller ?</p>' +
       '<div class="track" role="listbox" aria-label="Entités">' + LIST.map(card).join('') + '</div>' +
@@ -106,7 +116,7 @@
   var introHtml = current ?
     '<div class="intro" role="dialog" aria-modal="true" aria-label="' + esc(current.n) + ', une entité DENTAL GROUPE" hidden>' +
       '<div class="in-c">' +
-        '<p class="in-k">' + SYMBOL('ik') + '<span>DENTAL GROUPE présente</span></p>' +
+        '<p class="in-k">' + LOGO('ik-logo') + '<span>présente</span></p>' +
         '<img class="in-logo" src="' + ASSETS + current.logo + '" alt="' + esc(current.n) + '" style="height:' + Math.round(current.h * 1.7) + 'px">' +
         '<p class="in-d">' + esc(current.d) + '</p>' +
         '<div class="in-b"><button class="in-enter" type="button">Entrer sur ' + esc(current.n) + ARROW + '</button>' +
@@ -120,7 +130,7 @@
   /* ---------- Bandeau et pastille ---------- */
   var barHtml =
     '<div class="bar"><div class="bar-in">' +
-      '<a class="b-brand" href="' + esc(HOME) + '">' + SYMBOL('bs') + '<b>DENTAL GROUPE</b></a>' +
+      '<a class="b-brand" href="' + esc(HOME) + '">' + LOGO('bl-logo') + '</a>' +
       '<span class="sep" aria-hidden="true"></span><span class="msg">' + (current ? '<b>' + esc(current.n) + '</b> fait partie de DENTAL GROUPE' : 'Un site DENTAL GROUPE') + '</span>' +
       '<button class="b-btn open" type="button" aria-haspopup="dialog"><span class="bl">Toutes nos entités</span><span class="bsm">Nos entités</span>' + CHEV + '</button>' +
     '</div></div>';
@@ -140,7 +150,7 @@
     '.bar{position:relative;background:linear-gradient(90deg,#050711 0%,#16153c 55%,#3e3183 100%);border-bottom:1px solid rgba(255,255,255,.08)}' +
     '.bar-in{height:48px;padding:0 clamp(16px,3vw,40px);display:flex;align-items:center;gap:16px}' +
     '.b-brand{display:flex;align-items:center;gap:10px;flex:none}.b-brand b,.brand b{font:700 13px ' + F_BRAND + ';letter-spacing:.14em;color:#fff}' +
-    '.bs{width:26px;height:auto;display:block;overflow:visible}.b-brand:hover .p{transform:translate(calc(var(--dx)*4px),calc(var(--dy)*4px))}' +
+    '.bl-logo{height:30px;width:auto;display:block;overflow:visible}.ik-logo{height:30px;width:auto;display:block;overflow:visible}.bs{width:26px;height:auto;display:block;overflow:visible}.b-brand:hover .p,.brand:hover .p{transform:translate(calc(var(--dx)*4px),calc(var(--dy)*4px))}' +
     '.sep{width:1px;height:18px;background:rgba(255,255,255,.2);flex:none}' +
     '.msg{font-size:14px;color:#c9cde4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.msg b{color:#fff;font-weight:600}' +
     '.b-btn{margin-left:auto;flex:none;display:flex;align-items:center;gap:8px;height:34px;padding:0 14px 0 16px;border-radius:10px;background:#4136c3;color:#fff;font-weight:600;font-size:14px;transition:background .2s,transform .2s ' + POP + '}' +
@@ -243,7 +253,7 @@
     cards.forEach(function (c, k) { c.style.setProperty('--k', k); });
 
     function lock(on) { document.documentElement.style.overflow = on ? 'hidden' : ''; }
-    function focusCard(i, smooth) {
+    function focusCard(i, smooth, noScroll) {
       idx = (i + cards.length) % cards.length;
       cards.forEach(function (c, k) { c.setAttribute('aria-selected', String(k === idx)); c.tabIndex = k === idx ? 0 : -1; });
       var it = LIST[idx], c = cards[idx];
@@ -251,6 +261,7 @@
       goName.textContent = cur ? it.n : it.n;
       goBtn.classList.toggle('stay', cur);
       goBtn.href = it.url;
+      if (noScroll) return;
       var left = c.offsetLeft - (track.clientWidth - c.offsetWidth) / 2;
       track.scrollTo({ left: left, behavior: smooth && !reduce ? 'smooth' : 'auto' });
     }
@@ -286,7 +297,7 @@
     shadow.querySelector('.next').addEventListener('click', function () { focusCard(idx + 1, true); });
     cards.forEach(function (c, k) {
       c.addEventListener('click', function (e) { e.preventDefault(); if (k !== idx) { focusCard(k, true); return; } navigate(k); });
-      c.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse' && k !== idx) focusCard(k, false); });
+      c.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse' && k !== idx) focusCard(k, false, true); });
     });
     goBtn.addEventListener('click', function (e) { e.preventDefault(); navigate(idx); });
     var st = 0;
