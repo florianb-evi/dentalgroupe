@@ -8,6 +8,7 @@
  * Options :
  *   data-home   : adresse du site DENTAL GROUPE
  *   data-assets : dossier des icônes (par défaut : data-home + "logos/")
+ *   data-position : "top" (bandeau en haut, par défaut sur les sites des entités) ou "bottom" (pastille en bas)
  */
 (function () {
   if (window.__dgSwitcher) return;
@@ -36,6 +37,7 @@
   var current = null;
   GROUPS.forEach(function (g) { g.items.forEach(function (it) { if (it.url.indexOf('#') < 0 && host(it.url) === here) current = it; }); });
   var onHome = !current && host(HOME) === here;
+  var POS = (tag && tag.dataset.position) || (onHome ? 'bottom' : 'top');
 
   var SYMBOL_T = '<svg viewBox="0 0 93.2 80.49" aria-hidden="true"><defs>' +
     '<linearGradient id="dgsw1" x1="632.1" y1="-619.8" x2="677.6" y2="-631.9" gradientTransform="translate(-752.7 -732.7) scale(1.2 -1.2)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#98a4fe"/><stop offset=".5" stop-color="#6771fc"/><stop offset="1" stop-color="#3445cb"/></linearGradient>' +
@@ -77,6 +79,14 @@
       '<span class="ic sym">' + SYMBOL() + '</span>' +
       '<span class="pl"><span class="k">DENTAL GROUPE</span><span class="v">' + pillLabel + '</span></span>' + CHEV +
     '</button>';
+
+  var barLabel = current ? '<b>' + current.n + '</b> fait partie de DENTAL GROUPE' : 'Un site DENTAL GROUPE';
+  var barHtml =
+    '<div class="bar"><div class="bar-in">' +
+      '<a class="brand" href="' + HOME + '" aria-label="DENTAL GROUPE, accueil du groupe"><span class="sym">' + SYMBOL() + '</span><span class="bn">DENTAL GROUPE</span></a>' +
+      '<span class="sep" aria-hidden="true"></span><span class="msg">' + barLabel + '</span>' +
+      '<button class="pill btn" type="button" aria-expanded="false" aria-controls="dg-panel"><span class="bl">Toutes nos entités</span><span class="bs">Nos entités</span>' + CHEV + '</button>' +
+    '</div>' + html.replace(/<button class="pill"[\s\S]*<\/button>$/, '') + '</div>';
 
   var F_BRAND = '"Montserrat","Segoe UI",system-ui,sans-serif', F_BODY = '"DM Sans","Segoe UI",system-ui,sans-serif';
   var css =
@@ -122,6 +132,21 @@
     '.home{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1);border-radius:0 0 14px 14px}' +
     'a:focus-visible,button:focus-visible{outline:2px solid #74a3ff;outline-offset:2px}' +
     '@media (max-width:640px){.wrap{left:10px;right:10px;transform:none;align-items:stretch}.pill{align-self:center}.panel{width:auto;max-height:calc(100dvh - 96px);padding:16px}.grid{grid-template-columns:1fr 1fr;gap:2px 8px}.ent .ds,.ent .arr{display:none}.ent{padding:7px 6px;gap:9px}.ent .nm{font-size:13.5px}}' +
+    /* Bandeau en haut (sites des entités) : fond plein, lisible sur tous les sites */
+    '.wrap.top{position:relative;left:auto;bottom:auto;transform:none;display:block;z-index:2147483000}' +
+    '.bar{position:relative;background:linear-gradient(90deg,#050711 0%,#16153c 55%,#3e3183 100%);border-bottom:1px solid rgba(255,255,255,.08)}' +
+    '.bar-in{box-sizing:border-box;max-width:1360px;margin:0 auto;height:44px;padding:0 20px;display:flex;align-items:center;gap:14px}' +
+    '.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;flex:none}' +
+    '.brand .sym svg{width:24px;height:auto;display:block}' +
+    '.bn{font:700 12.5px ' + F_BRAND + ';letter-spacing:.14em;color:#fff}' +
+    '.sep{width:1px;height:18px;background:rgba(255,255,255,.2);flex:none}' +
+    '.msg{font-size:13.5px;color:#c9cde4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.msg b{color:#fff;font-weight:600}' +
+    '.btn{margin-left:auto;flex:none;display:flex;align-items:center;gap:8px;height:32px;padding:0 12px 0 14px;border-radius:8px;border:0;background:#4136c3;color:#fff;font-weight:600;font-size:13.5px;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;transform:none}' +
+    '.btn:hover{background:#5045dc;transform:none}' +
+    '.btn .chev{color:#fff;transform:rotate(180deg)}.btn[aria-expanded="true"] .chev{transform:none}' +
+    '.bs{display:none}' +
+    '.top .panel{position:absolute;right:max(12px,calc((100vw - 1360px) / 2 + 12px));top:calc(100% + 8px);background:#0b0f24;-webkit-backdrop-filter:none;backdrop-filter:none;max-height:calc(100vh - 80px)}' +
+    '@media (max-width:640px){.ent .here{display:none}.sep,.msg{display:none}.bl{display:none}.bs{display:inline}.bar-in{padding:0 12px}.top .panel{left:8px;right:8px;width:auto}}' +
     '@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}@media print{.wrap{display:none}}';
 
   function mount() {
@@ -129,13 +154,18 @@
     var root = document.createElement('div');
     root.id = 'dg-switcher';
     var shadow = root.attachShadow({ mode: 'open' });
-    shadow.innerHTML = '<style>' + css + '</style><div class="wrap">' + html + '</div>';
-    document.body.appendChild(root);
-
-    var spacer = document.createElement('div');
-    spacer.setAttribute('aria-hidden', 'true');
-    spacer.style.cssText = 'height:84px';
-    document.body.appendChild(spacer);
+    if (POS === 'top') {
+      shadow.innerHTML = '<style>' + css + '</style><div class="wrap top">' + barHtml + '</div>';
+      document.body.insertBefore(root, document.body.firstChild);
+      offsetFixedHeaders(root);
+    } else {
+      shadow.innerHTML = '<style>' + css + '</style><div class="wrap">' + html + '</div>';
+      document.body.appendChild(root);
+      var spacer = document.createElement('div');
+      spacer.setAttribute('aria-hidden', 'true');
+      spacer.style.cssText = 'height:84px';
+      document.body.appendChild(spacer);
+    }
 
     var pill = shadow.querySelector('.pill'), panel = shadow.querySelector('.panel');
     function setOpen(on) {
@@ -148,6 +178,37 @@
     panel.addEventListener('click', function (e) { e.stopPropagation(); });
     document.addEventListener('click', function () { if (!panel.hidden) setOpen(false); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) { setOpen(false); pill.focus(); } });
+  }
+
+  /* Les en-têtes fixés en haut (ex. Divi) passent sous le bandeau tant qu'il est visible, puis reprennent leur place. */
+  function offsetFixedHeaders(root) {
+    var list = [];
+    function scan() {
+      list.forEach(function (o) { o.el.style.top = o.top; });
+      list = [];
+      var H = root.getBoundingClientRect().height;
+      var els = document.body.querySelectorAll('header,nav,[id*="header" i],[class*="header" i],[class*="sticky" i],[id*="nav" i]');
+      for (var i = 0; i < els.length && list.length < 6; i++) {
+        var el = els[i];
+        if (el === root || el.id === 'wpadminbar' || el.closest('#wpadminbar')) continue;
+        var cs = getComputedStyle(el);
+        if (cs.position !== 'fixed') continue;
+        var r = el.getBoundingClientRect();
+        if (r.top > 40 || r.width < innerWidth * .5) continue;
+        if (list.some(function (o) { return o.el.contains(el); })) continue;
+        list.push({ el: el, top: el.style.top, base: parseFloat(cs.top) || 0, h: H });
+      }
+      upd();
+    }
+    function upd() {
+      var y = window.scrollY || 0;
+      list.forEach(function (o) { o.el.style.top = (o.base + Math.max(0, o.h - y)) + 'px'; });
+    }
+    var raf = 0;
+    window.addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(function () { raf = 0; upd(); }); }, { passive: true });
+    window.addEventListener('resize', function () { clearTimeout(scan.t); scan.t = setTimeout(scan, 200); });
+    window.addEventListener('load', scan);
+    setTimeout(scan, 50); setTimeout(scan, 1200);
   }
 
   if (document.body) mount(); else document.addEventListener('DOMContentLoaded', mount);
