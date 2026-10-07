@@ -30,13 +30,19 @@ Si le domaine final n'est pas `dentalgroupe.com`, remplacer l'adresse dans `inde
 
 ## Barre des entités sur les autres sites
 
-Sur chaque site d'entité (oofti.fr, safe-implant.fr, cmonlab.fr…), ajouter avant `</body>`. Un bandeau « DENTAL GROUPE » s'affiche alors en haut de la page (ajouter `data-position="bottom"` pour garder la pastille en bas) :
+Sur chaque site d'entité (oofti.fr, safe-implant.fr, augmantor.com…), ajouter avant `</body>` :
 
 ```html
 <script src="https://dentalgroupe.com/dg-switcher.js" data-home="https://dentalgroupe.com/" defer></script>
 ```
 
-Les icônes sont chargées depuis `https://dentalgroupe.com/logos/`.
+Ce que le script ajoute :
+- un bandeau DENTAL GROUPE en haut et une pastille « Nos entités » en bas ;
+- à la première visite de la session, un écran d'accueil : « Entrer sur le site » ou « Voir les autres entités » ;
+- un écran de sélection plein écran (flèches, Entrée, Échap) avec une transition animée entre les sites.
+
+Options : `data-position="top"` ou `"bottom"` pour n'afficher qu'un des deux ; `data-intro="off"` pour couper l'écran d'accueil.
+Les logos sont chargés depuis `https://dentalgroupe.com/logos/`.
 
 ## À brancher avant l'ouverture
 
