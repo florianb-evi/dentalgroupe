@@ -30,7 +30,7 @@ Si le domaine final n'est pas `dentalgroupe.com`, remplacer l'adresse dans `inde
 
 ## Barre des entités sur les autres sites
 
-Sur chaque site d'entité (oofti.fr, safe-implant.fr, cmonlab.fr…), ajouter avant `</body>` :
+Sur chaque site d'entité (oofti.fr, safe-implant.fr, cmonlab.fr…), ajouter avant `</body>`. Un bandeau « DENTAL GROUPE » s'affiche alors en haut de la page (ajouter `data-position="bottom"` pour garder la pastille en bas) :
 
 ```html
 <script src="https://dentalgroupe.com/dg-switcher.js" data-home="https://dentalgroupe.com/" defer></script>
