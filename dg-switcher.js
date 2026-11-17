@@ -1,6 +1,6 @@
 /*!
  * Sélecteur d'entités DENTAL GROUPE
- * Un seul fichier, installé sur chaque site du groupe (dentalgroupe.com, oofti.fr, safe-implant.fr, augmantor.com…).
+ * Un seul fichier, installé sur chaque site du groupe (dentalgroupe.com, oofti.fr, safe-implant.fr, safe-coaching.fr…).
  *
  * Sur un site d'entité :
  *   - un bandeau DENTAL GROUPE en haut + une pastille « Nos entités » en bas ;
@@ -29,18 +29,17 @@
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Pour ajouter une entité : une ligne ici, et tous les sites sont à jour.
-  // q = besoin (1 Équipement et matériel, 2 Gestion cabinet, 3 Fabrication, 4 Formation), h = hauteur du logo
-  var NEEDS = { 1: 'Équipement et matériel', 2: 'Gestion cabinet', 3: 'Fabrication', 4: 'Formation' };
+  // q = besoin (1 Équipement et matériel, 2 Gestion cabinet, 3 Prothèses, 4 Formations), h = hauteur du logo
+  var NEEDS = { 1: 'Équipement et matériel', 2: 'Gestion cabinet', 3: 'Prothèses', 4: 'Formations' };
   var ITEMS = [
     { n: 'oofti.fr',        q: 1, d: 'Matériel dentaire en ligne',           url: 'https://oofti.fr/',          icon: 'icon-oofti.svg',           logo: 'oofti-blanc.svg',              h: 44 },
     { n: 'Safe Implant',    q: 1, d: 'Matériel de chirurgie et implants',    url: 'https://safe-implant.fr/',   icon: 'icon-safe-implant.svg',    logo: 'safe-implant.svg',             h: 76 },
-    { n: 'Safe Rénovation', q: 2, d: 'Conception et rénovation de cabinets', url: 'https://safe-renovation.fr/', icon: 'icon-safe-renovation.png', logo: 'safe-renovation.png',          h: 42 },
-    { n: 'Evidentall',      q: 2, d: 'Logiciel dentaire complet',            url: CONTACT,            icon: 'icon-evidentall.svg',      logo: 'evidentall-blanc-court.svg',   h: 34 },
-    { n: 'CMONLAB',         q: 3, d: 'Laboratoire numérique à Paris',        url: 'https://cmonlab.fr/',        icon: 'icon-cmonlab.png',         logo: 'cmonlab.png',                  h: 44 },
-    { n: 'Axel Dentaire',   q: 3, d: 'Laboratoire de prothèse',              url: 'https://axeldentaire.fr/',   icon: 'icon-axel-dentaire.png',   logo: 'axel-dentaire.png',            h: 64 },
     { n: 'Safe Academy',    q: 4, d: 'Formation théorique',                  url: 'https://safeacademy.fr/',    icon: 'icon-safe-academy.svg',    logo: 'safe-academy.svg',             h: 30 },
     { n: 'Safe Coaching',   q: 4, d: 'Formation en situation réelle',        url: 'https://safe-coaching.fr/',  icon: 'icon-safe-coaching.svg',   logo: 'safe-coaching.svg',            h: 44 },
-    { n: 'Augmantor',       q: 4, d: 'Cercle des mentors cliniques',         url: 'https://augmantor.com/',     icon: 'icon-augmantor.svg',       logo: 'augmantor-blanc.svg',          h: 28 }
+    { n: 'CMONLAB',         q: 3, d: 'Laboratoire numérique à Paris',        url: 'https://cmonlab.fr/',        icon: 'icon-cmonlab.png',         logo: 'cmonlab.png',                  h: 44 },
+    { n: 'Axel Dentaire',   q: 3, d: 'Laboratoire de prothèse',              url: 'https://axeldentaire.fr/',   icon: 'icon-axel-dentaire.png',   logo: 'axel-dentaire.png',            h: 64 },
+    { n: 'Safe Rénovation', q: 2, d: 'Conception et rénovation de cabinets', url: 'https://safe-renovation.fr/', icon: 'icon-safe-renovation.png', logo: 'safe-renovation.png',          h: 42 },
+    { n: 'Evidentall',      q: 2, d: 'Logiciel dentaire complet',            url: CONTACT,            icon: 'icon-evidentall.svg',      logo: 'evidentall-blanc-court.svg',   h: 34 }
   ];
 
   function host(u) { try { return new URL(u, location.href).hostname.replace(/^www\./, ''); } catch (e) { return ''; } }
