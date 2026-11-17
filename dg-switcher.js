@@ -16,6 +16,7 @@
  *   data-assets   : dossier des logos (par défaut : data-home + "logos/")
  *   data-position : "both" (bandeau + pastille, par défaut sur les entités), "top", "bottom"
  *   data-intro    : "off" pour ne jamais afficher l'écran d'accueil
+ *   data-newtab   : "on" / "off" pour ouvrir les autres sites dans un nouvel onglet (par défaut : oui sur le site du groupe)
  */
 (function () {
   if (window.__dgSwitcher) return;
@@ -29,17 +30,20 @@
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Pour ajouter une entité : une ligne ici, et tous les sites sont à jour.
-  // q = besoin (1 Équipement et matériel, 2 Gestion cabinet, 3 Prothèses, 4 Formations), h = hauteur du logo
-  var NEEDS = { 1: 'Équipement et matériel', 2: 'Gestion cabinet', 3: 'Prothèses', 4: 'Formations' };
+  // q = forme du symbole (1 haut-gauche Équipement et matériel, 2 haut-droite Formations,
+  //     4 bas-droite Prothèses, 3 bas-gauche Gestion cabinet), h = hauteur du logo.
+  // Les entités sont rangées dans le sens des aiguilles d'une montre : 1, 2, 4, 3.
+  var NEEDS = { 1: 'Équipement et matériel', 2: 'Formations', 3: 'Gestion cabinet', 4: 'Prothèses' };
+  var CATS = [0, 1, 2, 4, 3];
   var ITEMS = [
     { n: 'oofti.fr',        q: 1, d: 'Matériel dentaire en ligne',           url: 'https://oofti.fr/',          icon: 'icon-oofti.svg',           logo: 'oofti-blanc.svg',              h: 44 },
     { n: 'Safe Implant',    q: 1, d: 'Matériel de chirurgie et implants',    url: 'https://safe-implant.fr/',   icon: 'icon-safe-implant.svg',    logo: 'safe-implant.svg',             h: 76 },
-    { n: 'Safe Academy',    q: 4, d: 'Formation théorique',                  url: 'https://safeacademy.fr/',    icon: 'icon-safe-academy.svg',    logo: 'safe-academy.svg',             h: 30 },
-    { n: 'Safe Coaching',   q: 4, d: 'Formation en situation réelle',        url: 'https://safe-coaching.fr/',  icon: 'icon-safe-coaching.svg',   logo: 'safe-coaching.svg',            h: 44 },
-    { n: 'CMONLAB',         q: 3, d: 'Laboratoire numérique à Paris',        url: 'https://cmonlab.fr/',        icon: 'icon-cmonlab.png',         logo: 'cmonlab.png',                  h: 44 },
-    { n: 'Axel Dentaire',   q: 3, d: 'Laboratoire de prothèse',              url: 'https://axeldentaire.fr/',   icon: 'icon-axel-dentaire.png',   logo: 'axel-dentaire.png',            h: 64 },
-    { n: 'Safe Rénovation', q: 2, d: 'Conception et rénovation de cabinets', url: 'https://safe-renovation.fr/', icon: 'icon-safe-renovation.png', logo: 'safe-renovation.png',          h: 42 },
-    { n: 'Evidentall',      q: 2, d: 'Logiciel dentaire complet',            url: CONTACT,            icon: 'icon-evidentall.svg',      logo: 'evidentall-blanc-court.svg',   h: 34 }
+    { n: 'Safe Academy',    q: 2, d: 'Formation théorique',                  url: 'https://safeacademy.fr/',    icon: 'icon-safe-academy.svg',    logo: 'safe-academy.svg',             h: 30 },
+    { n: 'Safe Coaching',   q: 2, d: 'Formation en situation réelle',        url: 'https://safe-coaching.fr/',  icon: 'icon-safe-coaching.svg',   logo: 'safe-coaching.svg',            h: 44 },
+    { n: 'CMONLAB',         q: 4, d: 'Laboratoire numérique à Paris',        url: 'https://cmonlab.fr/',        icon: 'icon-cmonlab.png',         logo: 'cmonlab.png',                  h: 44 },
+    { n: 'Axel Dentaire',   q: 4, d: 'Laboratoire de prothèse',              url: 'https://axeldentaire.fr/',   icon: 'icon-axel-dentaire.png',   logo: 'axel-dentaire.png',            h: 64 },
+    { n: 'Safe Rénovation', q: 3, d: 'Conception et rénovation de cabinets', url: 'https://safe-renovation.fr/', icon: 'icon-safe-renovation.png', logo: 'safe-renovation.png',          h: 42 },
+    { n: 'Evidentall',      q: 3, d: 'Logiciel dentaire complet',            url: CONTACT,            icon: 'icon-evidentall.svg',      logo: 'evidentall-blanc-court.svg',   h: 34 }
   ];
 
   function host(u) { try { return new URL(u, location.href).hostname.replace(/^www\./, ''); } catch (e) { return ''; } }
@@ -51,6 +55,9 @@
   var LIST = [HOME_ITEM].concat(ITEMS);
   var POS = (tag && tag.dataset.position) || (onHome ? 'bottom' : 'both');
   var INTRO = !!current && !(tag && tag.dataset.intro === 'off');
+  // Sur le site du groupe, les sites des entités s'ouvrent dans un nouvel onglet (data-newtab="off" pour désactiver).
+  var NEWTAB = tag && tag.dataset.newtab ? tag.dataset.newtab !== 'off' : onHome;
+  function isExt(u) { return /^https?:/.test(u) && host(u) !== here; }
 
   /* ---------- Formes du symbole ---------- */
   var Q = [
@@ -85,6 +92,7 @@
   }
   var CHEV = '<svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 10l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var ARROW = '<svg class="arr" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var EXT = '<svg class="ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3L7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var CLOSE = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
@@ -92,23 +100,28 @@
   function card(it, i) {
     var cur = it === current || (it.home && onHome);
     var logo = it.home ? SYMBOL('home-sym') : '<img src="' + ASSETS + it.logo + '" alt="" style="height:' + it.h + 'px" loading="lazy">';
-    return '<a class="card q' + it.q + '" href="' + esc(it.url) + '" data-i="' + i + '" role="option" aria-selected="false"' + (cur ? ' data-cur="1"' : '') + '>' +
+    var nt = NEWTAB && isExt(it.url) && !cur;
+    return '<a class="card q' + it.q + '" href="' + esc(it.url) + '" data-i="' + i + '" role="option" aria-selected="false"' + (cur ? ' data-cur="1"' : '') + (nt ? ' target="_blank" rel="noopener"' : '') + '>' +
       (it.home ? '' : SYMBOL('wm', it.q)) +
       '<span class="need">' + (it.home ? 'Le groupe' : NEEDS[it.q]) + '</span>' +
       '<span class="lg">' + logo + '</span>' +
       '<span class="nm">' + esc(it.n) + '</span><span class="ds">' + esc(it.d) + '</span>' +
-      (cur ? '<span class="here">Vous êtes ici</span>' : '') + '</a>';
+      (cur ? '<span class="here">Vous êtes ici</span>' : '') +
+      (nt ? '<span class="ext-b" aria-hidden="true">' + EXT + '</span>' : '') + '</a>';
   }
   var selHtml =
     '<div class="sel" role="dialog" aria-modal="true" aria-label="Les entités DENTAL GROUPE" hidden>' +
       '<div class="sel-top"><span class="brand">' + LOGO('bl-logo') + '</span>' +
       '<button class="x" type="button" aria-label="Fermer">' + CLOSE + '</button></div>' +
       '<p class="sel-t">Où voulez-vous aller ?</p>' +
+      '<div class="cats" role="group" aria-label="Catégories">' + CATS.map(function (q) {
+        return '<button class="cat" type="button" data-q="' + q + '">' + (q ? SYMBOL('cq', q) : SYMBOL('cq')) + '<span>' + (q ? NEEDS[q] : 'Le groupe') + '</span></button>';
+      }).join('') + '</div>' +
       '<div class="track" role="listbox" aria-label="Entités">' + LIST.map(card).join('') + '</div>' +
       '<div class="sel-bot"><button class="nav-b prev" type="button" aria-label="Précédent">' + CHEV + '</button>' +
-        '<a class="go" href="#"><span class="l-go">Aller sur</span><span class="l-stay">Rester sur</span> <b class="go-n"></b>' + ARROW + '</a>' +
+        '<a class="go" href="#"><span class="l-go">Aller sur</span><span class="l-stay">Rester sur</span> <b class="go-n"></b>' + ARROW + EXT + '<span class="sr l-nt">(nouvel onglet)</span></a>' +
         '<button class="nav-b next" type="button" aria-label="Suivant">' + CHEV + '</button></div>' +
-      '<p class="hint"><kbd>←</kbd><kbd>→</kbd> <span>choisir</span> · <kbd>Entrée</kbd> <span>y aller</span> · <kbd>Échap</kbd> <span>fermer</span></p>' +
+      '<p class="hint"><kbd>←</kbd><kbd>→</kbd> <span>choisir</span> · <kbd>↑</kbd><kbd>↓</kbd> <span>catégorie</span> · <kbd>Entrée</kbd> <span>y aller</span> · <kbd>Échap</kbd> <span>fermer</span></p>' +
     '</div>';
 
   /* ---------- Écran d'accueil (sites des entités) ---------- */
@@ -179,6 +192,16 @@
     '.home-sym{width:96px;height:auto;overflow:visible}.card[aria-selected="true"] .home-sym .p{transform:translate(calc(var(--dx)*5px),calc(var(--dy)*5px))}' +
     '.nm{font:700 22px/1.2 ' + F_BRAND + ';letter-spacing:-.02em;color:#fff}.ds{margin-top:4px;font-size:14px;color:#c9cde4}' +
     '.here{position:absolute;top:18px;right:18px;font-size:12px;font-weight:600;color:#fff;background:#4136c3;border-radius:8px;padding:4px 9px}' +
+    '.cats{display:flex;justify-content:center;gap:8px;margin:clamp(14px,2.4vh,26px) auto 0;padding:0 16px;max-width:100%;overflow-x:auto;scrollbar-width:none}.cats::-webkit-scrollbar{display:none}' +
+    '.cat{flex:none;display:flex;align-items:center;gap:9px;height:40px;padding:0 15px 0 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);font:500 13.5px ' + F_BRAND + ';color:#a9b0c7;white-space:nowrap;transition:color .25s,background .25s,border-color .25s}' +
+    '.cat:hover{color:#fff;border-color:rgba(152,164,254,.5)}' +
+    '.cat.on{color:#fff;background:rgba(65,54,195,.38);border-color:rgba(152,164,254,.6)}' +
+    '.cq{width:20px;height:auto;flex:none;overflow:visible}.cat:not(.on) .cq{opacity:.75}.cat.on .cq .p{transform:translate(calc(var(--dx)*2px),calc(var(--dy)*2px))}' +
+    '.ext-b{position:absolute;top:18px;right:18px;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.14);color:#c9cde4;opacity:0;transform:scale(.8);transition:opacity .3s,transform .4s ' + POP + '}.ext-b svg{width:14px;height:14px}' +
+    '.card[aria-selected="true"] .ext-b{opacity:1;transform:none}' +
+    '.go .ext,.go.nt .arr{display:none}.go.nt .ext{display:block;width:16px;height:16px}.l-nt{display:none}.go.nt .l-nt{display:inline}' +
+    '.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}' +
+    '.card{cursor:pointer}.card .need{position:relative}' +
     '.sel-bot{display:flex;align-items:center;justify-content:center;gap:14px;padding:0 16px}' +
     '.nav-b{width:52px;height:52px;border-radius:14px;border:1px solid rgba(255,255,255,.16);display:grid;place-items:center;color:#fff;transition:border-color .2s,transform .3s ' + POP + '}.nav-b:hover{border-color:#74a3ff}.nav-b:active{transform:scale(.92)}' +
     '.nav-b svg{width:18px;height:18px}.prev svg{transform:rotate(-90deg)}.next svg{transform:rotate(90deg)}' +
@@ -198,7 +221,7 @@
     /* animations d'entrée */
     '.open-anim .sel-t{animation:dropIn .6s ' + POP + ' both}' +
     '.open-anim .card{animation:cardIn .6s ' + POP + ' both;animation-delay:calc(var(--k,0)*45ms)}' +
-    '.open-anim .sel-bot,.open-anim .hint{animation:fadeUp .5s ' + EASE + ' .25s both}' +
+    '.open-anim .sel-bot,.open-anim .hint,.open-anim .cats{animation:fadeUp .5s ' + EASE + ' .25s both}' +
     '@keyframes dropIn{from{opacity:0;transform:translateY(-24px) scale(.96)}}' +
     '@keyframes cardIn{from{opacity:0;transform:translateY(60px) scale(.7) rotate(-4deg)}}' +
     '@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}}' +
@@ -215,7 +238,7 @@
     '.wsym{width:min(40vmin,340px);height:auto;overflow:visible}' +
     '.wipe .p{transition:transform .65s cubic-bezier(.7,0,.2,1);transform:translate(calc(var(--dx)*260px),calc(var(--dy)*240px)) rotate(calc(var(--dx)*var(--dy)*20deg))}' +
     '.wipe.closed .p{transform:none}' +
-    '@media (max-width:640px){.sep,.msg,.bl{display:none}.bsm{display:inline}.bar-in{gap:10px}.track{padding:2vh calc(50vw - 130px);gap:14px}.card{flex-basis:260px;height:min(380px,50vh)}.hint{display:none}.go{height:52px;padding:0 18px;font-size:15px}.nav-b{width:48px;height:48px}.sel-bot{margin-bottom:20px}.in-b{flex-direction:column;align-items:stretch;width:min(320px,86vw)}.in-enter{justify-content:center}.in-h{display:none}}' +
+    '@media (max-width:640px){.cats{justify-content:flex-start;gap:6px}.cat{height:38px;padding:0 10px}.cat:not(.on) span{display:none}.cat.on{padding-right:14px}.sep,.msg,.bl{display:none}.bsm{display:inline}.bar-in{gap:10px}.track{padding:2vh calc(50vw - 130px);gap:14px}.card{flex-basis:260px;height:min(380px,50vh)}.hint{display:none}.go{height:52px;padding:0 18px;font-size:15px}.nav-b{width:48px;height:48px}.sel-bot{margin-bottom:20px}.in-b{flex-direction:column;align-items:stretch;width:min(320px,86vw)}.in-enter{justify-content:center}.in-h{display:none}}' +
     '@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}@media print{.bar,.pill,.sel,.intro,.wipe{display:none}}';
 
   function mount() {
@@ -252,14 +275,32 @@
     cards.forEach(function (c, k) { c.style.setProperty('--k', k); });
 
     function lock(on) { document.documentElement.style.overflow = on ? 'hidden' : ''; }
-    function focusCard(i, smooth, noScroll) {
+    var cats = [].slice.call(shadow.querySelectorAll('.cat'));
+    function select(i) {
       idx = (i + cards.length) % cards.length;
       cards.forEach(function (c, k) { c.setAttribute('aria-selected', String(k === idx)); c.tabIndex = k === idx ? 0 : -1; });
       var it = LIST[idx], c = cards[idx];
-      var cur = c.hasAttribute('data-cur');
-      goName.textContent = cur ? it.n : it.n;
+      var cur = c.hasAttribute('data-cur'), nt = c.target === '_blank';
+      goName.textContent = it.n;
       goBtn.classList.toggle('stay', cur);
+      goBtn.classList.toggle('nt', nt);
       goBtn.href = it.url;
+      if (nt) { goBtn.target = '_blank'; goBtn.rel = 'noopener'; } else { goBtn.removeAttribute('target'); goBtn.removeAttribute('rel'); }
+      cats.forEach(function (b) {
+        var on = +b.dataset.q === it.q;
+        b.classList.toggle('on', on);
+        if (on) { b.setAttribute('aria-current', 'true'); var p = b.parentElement; if (p.scrollWidth > p.clientWidth) p.scrollTo({ left: b.offsetLeft - (p.clientWidth - b.offsetWidth) / 2, behavior: reduce ? 'auto' : 'smooth' }); }
+        else b.removeAttribute('aria-current');
+      });
+    }
+    function firstOf(q) { for (var k = 0; k < LIST.length; k++) if (LIST[k].q === q) return k; return 0; }
+    function jumpCat(dir) {
+      var c = CATS.indexOf(LIST[idx].q), n = CATS[(c + dir + CATS.length) % CATS.length];
+      focusCard(firstOf(n), true); cards[idx].focus({ preventScroll: true });
+    }
+    function focusCard(i, smooth, noScroll) {
+      select(i);
+      var c = cards[idx];
       if (noScroll) return;
       var left = c.offsetLeft - (track.clientWidth - c.offsetWidth) / 2;
       track.scrollTo({ left: left, behavior: smooth && !reduce ? 'smooth' : 'auto' });
@@ -281,7 +322,12 @@
       if (c.hasAttribute('data-cur')) { closeSel(); return; }
       if (it.url.charAt(0) === '#') { closeSel(); location.hash = it.url; return; }
       var url = it.url;
-      if (/^https?:/.test(url) && host(url) !== here) url = url.replace(/(#.*)?$/, function (h) { return (url.split('#')[0].indexOf('?') < 0 ? '?' : '&') + 'dg=1' + (h || ''); });
+      if (isExt(url)) url = url.replace(/(#.*)?$/, function (h) { return (url.split('#')[0].indexOf('?') < 0 ? '?' : '&') + 'dg=1' + (h || ''); });
+      if (c.target === '_blank') {
+        window.open(url, '_blank', 'noopener');
+        if (!reduce) { c.classList.remove('picked'); void c.offsetWidth; c.classList.add('picked'); setTimeout(function () { c.classList.remove('picked'); }, 600); }
+        return;
+      }
       if (reduce) { location.href = url; return; }
       c.classList.add('picked');
       wipe.classList.add('on');
@@ -294,23 +340,37 @@
     shadow.querySelector('.x').addEventListener('click', closeSel);
     shadow.querySelector('.prev').addEventListener('click', function () { focusCard(idx - 1, true); });
     shadow.querySelector('.next').addEventListener('click', function () { focusCard(idx + 1, true); });
+    cats.forEach(function (b) { b.addEventListener('click', function () { focusCard(firstOf(+b.dataset.q), true); }); });
+    function modified(e) { return e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1; }
     cards.forEach(function (c, k) {
-      c.addEventListener('click', function (e) { e.preventDefault(); if (k !== idx) { focusCard(k, true); return; } navigate(k); });
+      c.addEventListener('click', function (e) { if (modified(e)) return; e.preventDefault(); if (k !== idx) { focusCard(k, true); return; } navigate(k); });
       c.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse' && k !== idx) focusCard(k, false, true); });
     });
-    goBtn.addEventListener('click', function (e) { e.preventDefault(); navigate(idx); });
+    goBtn.addEventListener('click', function (e) { if (modified(e)) return; e.preventDefault(); navigate(idx); });
+    /* Molette verticale : une entité par cran */
+    var wAcc = 0, wLock = 0;
+    track.addEventListener('wheel', function (e) {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      e.preventDefault();
+      if (Date.now() < wLock) return;
+      wAcc += e.deltaY;
+      if (Math.abs(wAcc) > 30) { focusCard(idx + (wAcc > 0 ? 1 : -1), true); wAcc = 0; wLock = Date.now() + 260; }
+    }, { passive: false });
     var st = 0;
     track.addEventListener('scroll', function () {
       clearTimeout(st);
       st = setTimeout(function () {
         var mid = track.scrollLeft + track.clientWidth / 2, best = idx, bd = 1e9;
         cards.forEach(function (c, k) { var d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid); if (d < bd) { bd = d; best = k; } });
-        if (best !== idx) { idx = best; cards.forEach(function (c, k) { c.setAttribute('aria-selected', String(k === idx)); c.tabIndex = k === idx ? 0 : -1; }); var it = LIST[idx]; goName.textContent = it.n; goBtn.classList.toggle('stay', cards[idx].hasAttribute('data-cur')); goBtn.href = it.url; }
+        if (best !== idx) select(best);
       }, 90);
     }, { passive: true });
     sel.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); focusCard(idx + 1, true); cards[idx].focus({ preventScroll: true }); }
-      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); focusCard(idx - 1, true); cards[idx].focus({ preventScroll: true }); }
+      var rtl = getComputedStyle(sel).direction === 'rtl';
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); focusCard(idx + ((e.key === 'ArrowRight') !== rtl ? 1 : -1), true); cards[idx].focus({ preventScroll: true }); }
+      else if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); jumpCat(1); }
+      else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); jumpCat(-1); }
+      else if (e.key === 'Home' || e.key === 'End') { e.preventDefault(); focusCard(e.key === 'Home' ? 0 : cards.length - 1, true); cards[idx].focus({ preventScroll: true }); }
       else if (e.key === 'Enter' && e.target.classList && e.target.classList.contains('card')) { e.preventDefault(); navigate(idx); }
       else if (e.key === 'Escape') { e.preventDefault(); closeSel(); }
       else if (e.key === 'Tab') {
