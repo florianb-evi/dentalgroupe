@@ -1386,6 +1386,11 @@ function route(){
 }
 addEventListener('hashchange',route);
 document.querySelectorAll('a[href^="#"]').forEach(a=>{const e=ENT[a.getAttribute('href').slice(1)];if(e){a.href=e.url;a.dataset.ext='1'}});
+/* Liens vers les sites externes (entités, réseaux) : nouvel onglet */
+const extTab=a=>{if(a&&/^https?:/i.test(a.getAttribute('href')||'')&&a.host!==location.host){a.target='_blank';a.rel='noopener'}};
+document.querySelectorAll('a[href]').forEach(extTab);
+document.addEventListener('click',e=>extTab(e.target.closest&&e.target.closest('a[href]')),true);
+document.addEventListener('auxclick',e=>extTab(e.target.closest&&e.target.closest('a[href]')),true);
 
 /* ---------- Méga-menu ---------- */
 disc.addEventListener('click',e=>{e.stopPropagation();const o=mega.hidden;mega.hidden=!o;disc.setAttribute('aria-expanded',o);document.documentElement.classList.toggle('menu-open',o);if(window.__lenis)o?window.__lenis.stop():window.__lenis.start()});
