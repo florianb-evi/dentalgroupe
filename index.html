@@ -51,7 +51,6 @@
 }
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--head) + 16px)}
-#p-groupe section[id]{scroll-margin-top:calc(var(--head) + 40px)}
 body{margin:0;background:var(--bg);color:var(--text);font:400 var(--t-md)/1.6 var(--body);-webkit-font-smoothing:antialiased;overflow-x:clip}
 h1,h2,h3,h4,p,blockquote,ul,ol,dl,dd,figure{margin:0}
 ul,ol{padding:0;list-style:none}
@@ -856,18 +855,8 @@ html.pg-wipe::after{animation:pgWipe .9s cubic-bezier(.6,0,.2,1)}
 .gp-sym use:nth-child(4),.jv use:nth-child(4){animation-delay:-3.5s}
 .gp-sym use:nth-child(3),.jv use:nth-child(3){animation-delay:-5.25s}
 @keyframes gpb{0%,100%{transform:none}50%{transform:translate(calc(var(--dx) * 6px),calc(var(--dy) * 6px))}}
-.gp-sub{position:sticky;top:var(--head);z-index:40;padding-block:10px;background:rgba(7,9,26,.74);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);border-block:1px solid var(--line)}
-.gp-sub-in{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
-.gp-sub-in::-webkit-scrollbar{display:none}
-.gp-sub a{flex:none;display:inline-flex;align-items:center;gap:10px;padding:9px 16px 9px 12px;border:1px solid transparent;border-radius:999px;font:500 var(--t-sm) var(--brand);color:var(--muted);text-decoration:none;transition:color .25s,background .25s,border-color .25s}
-:root[dir="rtl"] .gp-sub a{padding:9px 12px 9px 16px}
-.gp-sub a:hover{color:#fff;background:rgba(255,255,255,.05)}
-.gp-sub a.on{color:#fff;background:rgba(65,54,195,.34);border-color:rgba(152,164,254,.42)}
-.gq{width:18px;height:auto;flex:none}
-.gq use.off,.fm-q use.off,.pf2-q use.off{fill:rgba(255,255,255,.18)}
-.gp-sub a:not(.on) .gq use:not(.off){fill:rgba(255,255,255,.6)}
+.fm-q use.off,.pf2-q use.off{fill:rgba(255,255,255,.18)}
 @media (max-width:760px){.gp-hero{grid-template-columns:1fr;gap:var(--s4)}.gp-vis{order:-1;justify-self:start;width:132px}}
-@media (max-width:899px){.gp-sub-in{-webkit-mask-image:linear-gradient(90deg,transparent,#000 20px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,transparent,#000 20px,#000 calc(100% - 28px),transparent);padding-inline:4px}}
 @media (max-width:760px){.join-vis .jv{width:120px}}
 
 .pf2{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--s6);margin-top:var(--s4)}
@@ -1116,9 +1105,6 @@ html.motion .pf2-it .d{transition:color .5s}html.motion .pf2-it.on .d{color:var(
       <div class="gp-vis" aria-hidden="true"><svg class="gp-sym" viewBox="-16 -16 125.2 112.49" aria-hidden="true"><use href="#q1" fill="url(#g17)" style="--dx:-1;--dy:-1"/><use href="#q2" fill="url(#g2)" style="--dx:1;--dy:-1"/><use href="#q3" fill="url(#g16)" style="--dx:-1;--dy:1"/><use href="#q4" fill="url(#g15)" style="--dx:1;--dy:1"/></svg></div>
     </div>
   </header>
-  <nav class="gp-sub" aria-label="Sur cette page">
-    <div class="wrap"><div class="gp-sub-in"><a href="#plateforme"><svg class="gq" viewBox="0 0 93.2 80.49" aria-hidden="true"><use href="#q1" fill="url(#g17)" style="--dx:-1;--dy:-1"/><use href="#q2" class="off" style="--dx:1;--dy:-1"/><use href="#q3" class="off" style="--dx:-1;--dy:1"/><use href="#q4" class="off" style="--dx:1;--dy:1"/></svg><span>Raison d'être</span></a><a href="#organisation"><svg class="gq" viewBox="0 0 93.2 80.49" aria-hidden="true"><use href="#q1" class="off" style="--dx:-1;--dy:-1"/><use href="#q2" fill="url(#g2)" style="--dx:1;--dy:-1"/><use href="#q3" class="off" style="--dx:-1;--dy:1"/><use href="#q4" class="off" style="--dx:1;--dy:1"/></svg><span>Organisation</span></a><a href="#carrieres"><svg class="gq" viewBox="0 0 93.2 80.49" aria-hidden="true"><use href="#q1" class="off" style="--dx:-1;--dy:-1"/><use href="#q2" class="off" style="--dx:1;--dy:-1"/><use href="#q3" class="off" style="--dx:-1;--dy:1"/><use href="#q4" fill="url(#g15)" style="--dx:1;--dy:1"/></svg><span>Carrières</span></a><a href="#postuler"><svg class="gq" viewBox="0 0 93.2 80.49" aria-hidden="true"><use href="#q1" class="off" style="--dx:-1;--dy:-1"/><use href="#q2" class="off" style="--dx:1;--dy:-1"/><use href="#q3" fill="url(#g16)" style="--dx:-1;--dy:1"/><use href="#q4" class="off" style="--dx:1;--dy:1"/></svg><span>Candidater</span></a></div></div>
-  </nav>
   <section class="platform pf2-sec" data-tone="calm" id="plateforme" aria-labelledby="pfTitle">
     <div class="wrap">
       <div class="sec-head"><h2 id="pfTitle">Ce qui nous guide</h2></div>
@@ -1458,7 +1444,7 @@ function route(){
   if(pg){ showPage(h); document.title=(TITLES[h]?TITLES[h]+' · ':'')+'DENTAL GROUPE'; curKey=h; (window.__lenis?window.__lenis.scrollTo(0,{immediate:true,force:true}):scrollTo({top:0,behavior:'auto'})); dispatchEvent(new Event('scroll')); return; }
   const el=document.getElementById(h); const host=el&&el.closest('main.page');
   if(host){ const k=host.dataset.page, changed=curKey!==k; showPage(k); curKey=k; document.title=(TITLES[k]?TITLES[k]+' · ':'')+'DENTAL GROUPE';
-    const go=()=>{const sub=host.querySelector('.gp-sub');if(sub&&window.__lenis){const t=(el.matches('section')&&el.querySelector('.wrap'))||el;const y=t.getBoundingClientRect().top+scrollY-(document.querySelector('.top').offsetHeight+sub.offsetHeight)-40;window.__lenis.scrollTo(Math.max(0,y),{immediate:changed,force:true})}else if(window.__lenis)window.__lenis.scrollTo(el,{offset:-88,immediate:changed,force:true});else el.scrollIntoView({behavior:changed?'auto':'smooth'})};
+    const go=()=>{if(window.__lenis)window.__lenis.scrollTo(el,{offset:-88,immediate:changed,force:true});else el.scrollIntoView({behavior:changed?'auto':'smooth'})};
     requestAnimationFrame(go);if(changed)setTimeout(()=>{if(location.hash==='#'+h)go()},400); return; }
   showPage('accueil'); curKey='accueil'; scrollTo({top:0});
 }
@@ -1470,22 +1456,25 @@ document.querySelectorAll('a[href]').forEach(extTab);
 document.addEventListener('click',e=>extTab(e.target.closest&&e.target.closest('a[href]')),true);
 document.addEventListener('auxclick',e=>extTab(e.target.closest&&e.target.closest('a[href]')),true);
 
-/* ---------- Page « Le groupe » : sous-navigation + manifeste ---------- */
+/* ---------- Page « Le groupe » : manifeste ---------- */
 (()=>{
-  const sub=document.querySelector('.gp-sub');
-  if(sub&&'IntersectionObserver' in window){
-    const ls=[...sub.querySelectorAll('a')],ts=ls.map(a=>document.getElementById(a.getAttribute('href').slice(1))),st=new Map();
-    const pick=()=>{let best=-1;ts.forEach((t,i)=>{if(st.get(t))best=i});
-      ls.forEach((a,i)=>{const on=i===best;a.classList.toggle('on',on);on?a.setAttribute('aria-current','true'):a.removeAttribute('aria-current')});
-      const a=ls[best];if(a){const p=a.parentElement,x=a.offsetLeft-p.offsetLeft;if(x<p.scrollLeft||x+a.offsetWidth>p.scrollLeft+p.clientWidth)p.scrollTo({left:x-16,behavior:'smooth'})}};
-    const io=new IntersectionObserver(es=>{es.forEach(e=>st.set(e.target,e.isIntersecting||e.boundingClientRect.top<0));pick()},{rootMargin:'-150px 0px -50% 0px'});
-    ts.forEach(t=>t&&io.observe(t));
-  }
   const s=document.querySelector('.pf2');if(!s)return;
   const its=[...s.querySelectorAll('.pf2-it')],us=[...s.querySelectorAll('.pf2-sym use')],n=s.querySelector('.pf2-n'),bar=s.querySelector('.pf2-bar i');
   const set=i=>{if(i<0)return;its.forEach((e,k)=>e.classList.toggle('on',k===i));us.forEach(u=>u.classList.toggle('on',+u.dataset.i===i));n.textContent=String(i+1).padStart(2,'0');bar.style.transform='scaleX('+((i+1)/its.length)+')'};
   set(0);
   if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)set(its.indexOf(e.target))}),{rootMargin:'-45% 0px -45% 0px'});its.forEach(e=>io.observe(e))}
+})();
+
+/* ---------- Chiffres : compteur qui monte à l'apparition ---------- */
+(()=>{if(matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;
+  const ease=t=>1-Math.pow(1-t,3);
+  const run=dt=>{const tn=[...dt.childNodes].find(n=>n.nodeType===3&&/\d/.test(n.nodeValue));if(!tn||dt.__run)return;
+    const full=tn.nodeValue,m=full.match(/\d[\d\s\u202f.]*/);if(!m)return;const raw=m[0].replace(/\s+$/,''),to=parseInt(raw.replace(/\D/g,''),10);if(!to)return;
+    dt.__run=1;const t0=performance.now(),dur=2000;dt.style.minWidth=dt.offsetWidth+'px';
+    const step=now=>{const k=Math.min(1,(now-t0)/dur),v=Math.round(to*ease(k));tn.nodeValue=k<1?full.replace(raw,String(v)):full;if(k<1)requestAnimationFrame(step);else{dt.__run=0;dt.style.minWidth=''}};
+    requestAnimationFrame(step)};
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&!e.target.__seen){e.target.__seen=1;e.target.querySelectorAll('dt').forEach(run)}else if(!e.isIntersecting)e.target.__seen=0}),{threshold:.4});
+  document.querySelectorAll('dl.stats').forEach(d=>io.observe(d));
 })();
 /* ---------- Méga-menu ---------- */
 disc.addEventListener('click',e=>{e.stopPropagation();const o=mega.hidden;mega.hidden=!o;disc.setAttribute('aria-expanded',o);document.documentElement.classList.toggle('menu-open',o);if(window.__lenis)o?window.__lenis.stop():window.__lenis.start()});
