@@ -7,8 +7,7 @@ Site statique : une page HTML, sans compilation. Vercel le sert tel quel.
 | Fichier / dossier | Rôle |
 |---|---|
 | `index.html` | Le site complet (5 pages, 6 langues, styles et scripts inclus) |
-| `dg-switcher.js` | Barre « Toutes nos entités », à installer aussi sur les sites des entités |
-| `logos/` | Logos des entités, des marques et icônes de la barre |
+| `logos/` | Logos des entités et des marques |
 | `vendor/lenis.min.js` | Défilement fluide (Lenis 1.3.26, licence MIT dans `vendor/LENIS-LICENSE`) |
 | `favicon.svg`, `apple-touch-icon.png` | Icônes du site |
 | `robots.txt`, `sitemap.xml` | Référencement |
@@ -27,22 +26,6 @@ Site statique : une page HTML, sans compilation. Vercel le sert tel quel.
 5. Domaine : Project → Settings → **Domains** → ajouter `dentalgroupe.com` (et `www.dentalgroupe.com` en redirection), puis suivre les enregistrements DNS indiqués par Vercel.
 
 Si le domaine final n'est pas `dentalgroupe.com`, remplacer l'adresse dans `index.html` (balises `canonical` et `og:url`), `robots.txt` et `sitemap.xml`.
-
-## Barre des entités sur les autres sites
-
-Sur chaque site d'entité (oofti.fr, safe-implant.fr, safe-coaching.fr…), ajouter avant `</body>` :
-
-```html
-<script src="https://dentalgroupe.com/dg-switcher.js" data-home="https://dentalgroupe.com/" defer></script>
-```
-
-Ce que le script ajoute :
-- un bandeau DENTAL GROUPE en haut et une pastille « Nos entités » en bas ;
-- à la première visite de la session, un écran d'accueil : « Entrer sur le site » ou « Voir les autres entités » ;
-- un écran de sélection plein écran (flèches, Entrée, Échap) avec une transition animée entre les sites.
-
-Options : `data-position="top"` ou `"bottom"` pour n'afficher qu'un des deux ; `data-intro="off"` pour couper l'écran d'accueil.
-Les logos sont chargés depuis `https://dentalgroupe.com/logos/`.
 
 ## À brancher avant l'ouverture
 
