@@ -392,6 +392,8 @@ main.page>.page-head+section{padding-top:var(--s3)}
 .quote{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(12px,2vw,32px);margin-top:var(--s7);max-width:1180px}
 .quote .mark{font:700 clamp(96px,12vw,190px)/.8 var(--brand);color:var(--peri);transform-origin:50% 60%}
 .quote blockquote{font:500 clamp(28px,4.3vw,58px)/1.16 var(--brand);letter-spacing:-.025em;color:#fff;text-wrap:balance}
+.quote blockquote::after{content:"\201D";display:inline;margin-inline-start:.08em;font-weight:700;font-size:1.5em;line-height:0;vertical-align:-.12em;color:var(--peri);background:var(--grad-light);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;padding-bottom:.06em}
+section[data-tone="light"] .quote blockquote::after{background:linear-gradient(100deg,#3e3183,#4136c3 60%,#5a4fe0);-webkit-background-clip:text;background-clip:text}
 .quote cite{display:flex;align-items:center;gap:14px;margin-top:var(--s4);font-style:normal;font-size:var(--t-md);color:var(--muted)}
 .quote cite::before{content:"";flex:none;width:48px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--corn),var(--royal));transform-origin:0 50%}
 :root[dir="rtl"] .quote cite::before{transform-origin:100% 50%}
